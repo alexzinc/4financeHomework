@@ -1,4 +1,4 @@
-package stepdefs;
+package stepdefs.ItemFilter;
 
 import cucumber.api.java.en.Given;
 import cucumber.api.java.en.Then;
@@ -20,12 +20,12 @@ public class ItemFilterStepdef {
     BrandPage brandPage = new BrandPage(web);
 
     @Given("user opens (.*) page")
-    public void openHomePage(final String url) throws Exception {
+    public void openHomePage(final String url) {
         web.open(url);
     }
 
     @When("user selects (.*) in (.*) category")
-    public void selectCategory(String category, String categoryType) throws Exception {
+    public void selectCategory(String category, String categoryType)  {
         internalWebPage.closeDialog();
         switch (categoryType) {
             case "main":
@@ -58,12 +58,13 @@ public class ItemFilterStepdef {
     }
 
     @Then("user selects a price range between (\\d+) and (\\d+)")
-    public void setPriceRange(int startPriceRange, int endPriceRange) throws Exception {
-        brandPage.selectPriceRange(startPriceRange, endPriceRange);
+    public void setPriceRange(int startPriceRange, int endPriceRange) {
+        brandPage.setItemPriceRange(startPriceRange, endPriceRange);
     }
 
     @Then("selected brand items in price range of (.*) and (.*) should be displayed")
-    public void priceRangeIsDisplayed(int startPrice, int endPrice) {
-//        assert brandPage.priceRangeIsDisplayed(startPrice, endPrice);
+    public void priceRangeIsDisplayed(int startPrice, int endPrice) throws Exception {
+        brandPage.correctAmountOfItemsIsDisplayed();
+        brandPage.itemsFitDisplayedPriceRange(startPrice, endPrice);
     }
 }
