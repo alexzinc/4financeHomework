@@ -1,6 +1,7 @@
 package web;
 
 import org.joda.time.Duration;
+import org.junit.Assert;
 import org.openqa.selenium.By;
 import org.openqa.selenium.WebElement;
 import selenium.Web;
@@ -22,93 +23,116 @@ public class BrandPage {
     private static final By ITEM_MAXIMUM_PRICE_INPUT_FIELD = By.id("PriceFilterTextEntryMax");
     private static final By PRICE_RANGE_SUBMIT_BUTTON = By.id("PriceFilterTextEntryApply");
     private static final By ITEM_COUNTER = By.xpath("//*[@id='dnn_ctr42569670_ViewTemplate_ctl00_ctl07_lstFilters_CollapseDiv_1']//ancestor::*[@class='productFilter']//*[@class='FilterValue']");
+    private static final By ITEM_PRICE = By.xpath("//*[@class='CurrencySizeLarge curprice productHasRef']");
 
+    /**
+     * Brand page is loaded
+     */
     public BrandPage(Web web) {
         this.web = web;
     }
 
-    public void selectBrand(String brandType) throws Exception {
+
+    /**
+     * Method selects brand type
+     *
+     * @param brandType type of a brand
+     */
+    public void selectBrand(String brandType) {
         By BRAND_CHECKBOX = By.xpath("//*[@data-filtername='" + brandType + "']//ancestor::span[@role='checkbox']");
         web.waitUntil(visibilityOfElementLocated(BRAND_CHECKBOX));
         web.click(BRAND_CHECKBOX);
     }
 
-    public List<WebElement> itemAmount() throws Exception {
+    /**
+     * Method gets a list of items
+     */
+    public List<WebElement> getItemAmount() {
         web.waitUntil(visibilityOfAllElementsLocatedBy(ITEM_ELEMENTS));
         return web.findElements(ITEM_ELEMENTS);
     }
 
-    public void selectPriceRange(int startingPrice, int endPrice) throws Exception {
+    /**
+     * Method gets a list of product counter
+     */
+    public List<WebElement> getProductCounter() {
+        web.waitUntil(visibilityOfAllElementsLocatedBy(ITEM_COUNTER));
+        return web.findElements(ITEM_COUNTER);
+    }
+
+    /**
+     * Method gets a list of product prices
+     */
+    public List<WebElement> getRawItemPrice() {
+        web.waitUntil(visibilityOfAllElementsLocatedBy(ITEM_PRICE), Duration.standardSeconds(5), false);
+        return web.findElements(ITEM_PRICE);
+    }
+
+    /**
+     * Method gets a list of product prices,
+     * gets the whole size of elements of a list
+     * and removes all redundant symbols for every price
+     *
+     * @return handles prices
+     */
+    public ArrayList<Double> getItemPrice() {
+        List<WebElement> priceList = getRawItemPrice();
+        ArrayList<Double> price = new ArrayList<>(priceList.size());
+        for (WebElement tempPrice : priceList) {
+            String priceText = tempPrice.getText();
+            priceText = priceText.replaceAll("[^0-9.,]", "").replaceAll(",", ".");
+            price.add(Double.parseDouble(priceText));
+        }
+        return price;
+    }
+
+    /**
+     * method gets a list of product counters and sums them up
+     *
+     * @return - sum of product counters
+     */
+    public int getProductCounterSum() {
+        int sum = 0;
+        List<WebElement> productList = getProductCounter();
+        for (WebElement tempProduct : productList) {
+            String product = tempProduct.getText();
+            product = product.replaceAll("[)]", "").replaceAll("[(]", "");
+            int productCounter = Integer.parseInt(product);
+            sum += productCounter;
+        }
+        return sum;
+    }
+
+    /**
+     * Method checks if product counter sum is the same as a size of items in a list
+     */
+    public void correctAmountOfItemsIsDisplayed() {
+        Assert.assertTrue(getProductCounterSum() == getItemAmount().size());
+    }
+
+    /**
+     * Method inputs starting price and end price to price range input fields and clicks on submit
+     *
+     * @param startingPrice price from
+     * @param endPrice      price to
+     */
+    public void setItemPriceRange(int startingPrice, int endPrice) {
         web.waitUntil(visibilityOfElementLocated(ITEM_MINIMUM_PRICE_INPUT_FIELD), Duration.standardSeconds(10), false);
         web.type(ITEM_MINIMUM_PRICE_INPUT_FIELD, String.valueOf(startingPrice));
         web.type(ITEM_MAXIMUM_PRICE_INPUT_FIELD, String.valueOf(endPrice));
         web.click(PRICE_RANGE_SUBMIT_BUTTON);
     }
 
-//    public String checkItemCounter() throws Exception {
-//
-//ItemFilter filter = get
-//
-//        for (int i = 0; i < getItems().size(); i++) {
-//            ItemWrapper item = getItems().get(i);
-//            double itemPrice = item.getItemPrice();
-//            Assert.assertTrue("Price does not match the range", itemPrice >= from && itemPrice <= to);
-//        }
-//
-//
-//
-//        web.waitUntil(visibilityOfAllElementsLocatedBy(ITEM_COUNTER), Duration.standardSeconds(2), false);
-//
-//        List<WebElement> itemCount = web.findElements(ITEM_COUNTER);
-//
-//        List<String> all_elements_text = new ArrayList<>();
-//        for (WebElement anItemCount : itemCount) {
-//
-//            all_elements_text.add(anItemCount.getText());
-//            all_elements_text.replaceAll("kk", "");
-//            System.out.println(anItemCount.getText());
-//
-//        }
-//        String fullCommentaryText = itemCount.getText();
-//        System.out.println(Integer.parseInt(fullCommentaryText.substring(1, fullCommentaryText.length() - 1)));
-//        anonCommentary = Integer.parseInt(fullCommentaryText.substring(1, fullCommentaryText.length() - 1));
-//        return anonCommentary;
+    /**
+     * Method checks if all item prices displayed on page fit selected price range
+     *
+     * @param startingPrice prices from
+     * @param endPrice      prices to
+     */
 
-
-        //myList contains all the web elements
-        //if you want to get all elements text into array list
-
-            //loading text of each element in to array all_elements_text
-//            all_elements_text
-            //to print directly
-//
-//        }
-//
-//
-//    }
-//
-//    public boolean itemCount() throws Exception {
-//        int items = itemAmount();
-//
-//
-//        web.waitUntil(visibilityOfElementLocated(ANONYMOUS_COMMENTATY), Duration.standardSeconds(2), false);
-//        WebElement articleCommentCount = web.findElement(ANONYMOUS_COMMENTATY);
-//        String fullCommentaryText = articleCommentCount.getText();
-//        System.out.println(Integer.parseInt(fullCommentaryText.substring(11, fullCommentaryText.length() - 1)));
-//        anonCommentary = Integer.parseInt(fullCommentaryText.substring(11, fullCommentaryText.length() - 1));
-//        return anonCommentary;
-//    }
-
-
-//    public boolean priceRangeIsDisplayed(int startPrice, int endPrice) {
-
-//        for (int i = 0; i < getItems().size(); i++) {
-//            ItemWrapper item = getItems().get(i);
-//            double itemPrice = item.getItemPrice();
-//            Assert.assertTrue("Price does not match the range", itemPrice >= from && itemPrice <= to);
-//
-//        By dadaw = By.xpath("");
-//        return web.isDisplayed(dadaw);
-//    }
-
+    public void itemsFitDisplayedPriceRange(int startingPrice, int endPrice) {
+        for (Double itemPrice : getItemPrice()) {
+            Assert.assertTrue("Price is not in range", itemPrice >= startingPrice && itemPrice <= endPrice);
+        }
+    }
 }

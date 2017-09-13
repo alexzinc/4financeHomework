@@ -11,8 +11,3 @@ Feature: Item filtering test
     And user selects a price range between 30 and 60
     Then selected brand items in price range of 30 and 60 should be displayed
     And user closes the browser
-
-
-#  Create web test which would check whether item filter on
-#  sportsdirect.com is working properly. Open mens shoes section and filter
-#  by brands "Skechers" and "Firetrap" and price in range      30 - 60 EUR. Check items are correctly filtered!

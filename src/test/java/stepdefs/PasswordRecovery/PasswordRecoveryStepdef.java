@@ -17,7 +17,7 @@ import java.util.Map;
  * Created by aleksandrs on 10/09/2017.
  */
 public class PasswordRecoveryStepdef {
-    Web web;
+    Web web = new Web();
     User user = new User();
     EmailBoxPage emailBoxPage;
     InboxLvEmailPage inboxLvEmailPage;
@@ -126,11 +126,8 @@ public class PasswordRecoveryStepdef {
         logInPage.openPasswordRecovery();
         switch (rawEmail) {
             case "10minutemail.info":
-                mainPage.openLoginScreen();
-                logInPage = new LogInPage(web);
-                logInPage.openPasswordRecovery();
                 passwordRecoveryPage = new PasswordRecoveryPage(web, emailBoxPage);
-                passwordRecoveryPage.recoverPassword();
+                passwordRecoveryPage.recoverPassword(emailBoxPage.getEmail());
                 assert passwordRecoveryPage.confirmationMessageIsDisplayed();
                 break;
             case "inbox.lv":
@@ -140,7 +137,6 @@ public class PasswordRecoveryStepdef {
                 break;
         }
     }
-
 
     @When("user logs in to (.*) via login: (.*) and password: (.*)")
     public void logInToThirdPartyEmail(String emailProvider, String socialEmail, String socialPassword) {
@@ -168,5 +164,4 @@ public class PasswordRecoveryStepdef {
         homePage = new HomePage(web);
         assert homePage.isDisplayed();
     }
-
 }

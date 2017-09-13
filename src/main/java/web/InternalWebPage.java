@@ -13,12 +13,17 @@ public class InternalWebPage {
     Web web;
     private static final By CLOSE_POPUP_ITEM_BUTTON = By.xpath("//*[@class='modal-dialog advertPopup']//*[@class='modal-content']//*[@class='close' and @data-dismiss='modal']");
 
-
+    /**
+     * Internal web page with global methods
+     */
     public InternalWebPage(Web web) {
         this.web = web;
     }
 
-    public void closeDialog() throws Exception {
+    /**
+     * method checks if popup is displayed, if it is, then it is closed
+     */
+    public void closeDialog() {
         if (web.isDisplayed(CLOSE_POPUP_ITEM_BUTTON)) {
             web.waitUntil(visibilityOfElementLocated(CLOSE_POPUP_ITEM_BUTTON), Duration.standardSeconds(10), false);
             web.click(CLOSE_POPUP_ITEM_BUTTON);

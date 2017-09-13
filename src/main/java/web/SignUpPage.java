@@ -14,6 +14,10 @@ public class SignUpPage {
     Web web;
     EmailBoxPage emailBoxPage;
 
+
+    /**
+     * Sign up page and Email box page are loaded
+     */
     public SignUpPage(Web web, EmailBoxPage emailBoxPage) {
         this.web = web;
         this.emailBoxPage = emailBoxPage;
@@ -31,56 +35,109 @@ public class SignUpPage {
     private static final By PASSWORD_CONFIRMATION_INPUT_FIELD = By.id("dnn_ctr42569679_View_txtConfirm");
     private static final By SIGN_UP_BUTTON = By.id("dnn_ctr42569679_View_cmdRegister");
 
-    public void inputEmail(String email) throws Exception {
+
+    /**
+     * method allows to input email
+     *
+     * @param email - email
+     */
+    public void inputEmail(String email) {
         web.waitUntil(ExpectedConditions.visibilityOfElementLocated(EMAIL_INPUT_FIELD));
         String getEmail = emailBoxPage.getEmail();
         web.type(EMAIL_INPUT_FIELD, email.equalsIgnoreCase("*email*") ? getEmail : email);
     }
 
-    public void inputRepeatEmail(String email) throws Exception {
+    /**
+     * method allows to input email again
+     *
+     * @param email - email
+     */
+    public void inputRepeatEmail(String email) {
         web.click(RETYPE_EMAIL_INPUT_FIELD);
         String getEmail = emailBoxPage.getEmail();
         web.type(RETYPE_EMAIL_INPUT_FIELD, email.equalsIgnoreCase("*email*") ? getEmail : email);
     }
-//    SubCategoryPage subCategoryPage = homePage.openCatalogCategory(MainCategories.MENS.getCategory());
 
-    public void inputTitle(TreatmentType title) throws Exception {
+    /**
+     * method allows to select a title
+     *
+     * @param title - user title
+     */
+    public void inputTitle(TreatmentType title) {
         web.select(TREATMENT_TYPE_INPUT_FIELD).selectByValue(title.getTitle());
     }
 
-    public void selectBirthDay(int day) throws Exception {
+    /**
+     * method allows to select a day
+     *
+     * @param day - day of a month
+     */
+    public void selectBirthDay(int day) {
         web.select(INPUT_DAY_OF_BIRTH).selectByValue(String.valueOf(day));
     }
 
-    public void selectBirthMonth(int month) throws Exception {
+    /**
+     * method allows to select a month
+     *
+     * @param month - month of the year
+     */
+    public void selectBirthMonth(int month) {
         web.select(INPUT_MONTH_OF_BIRTH).selectByValue(String.valueOf(month));
     }
 
-    public void selectBirthYear(int year) throws Exception {
+    /**
+     * method allows to set a year
+     *
+     * @param year - year
+     */
+    public void selectBirthYear(int year) {
         web.select(INPUT_YEAR_OF_BIRTH).selectByValue(String.valueOf(year));
     }
 
-    public void inputFirstname(String firstname) throws Exception {
+    /**
+     * method allows to set users firstName
+     *
+     * @param firstname - users firstName
+     */
+    public void inputFirstname(String firstname) {
         web.click(FIRSTNAME_INPUT_FIELD);
         web.type(FIRSTNAME_INPUT_FIELD, firstname);
     }
 
-    public void inputLastname(String lastname) throws Exception {
+    /**
+     * method allows to set users lastName
+     *
+     * @param lastname - users lastName
+     */
+    public void inputLastname(String lastname) {
         web.click(LASTNAME_INPUT_FIELD);
         web.type(LASTNAME_INPUT_FIELD, lastname);
     }
 
-    public void inputPassowrd(String password) throws Exception {
+    /**
+     * method allows user to set his password
+     *
+     * @param password - user password
+     */
+    public void inputPassowrd(String password) {
         web.click(PASSWORD_INPUT_FIELD);
         web.type(PASSWORD_INPUT_FIELD, password);
     }
 
-    public void inputPasswordConfirmation(String password) throws Exception {
+    /**
+     * method allows user to set his password again
+     *
+     * @param password - user password
+     */
+    public void inputPasswordConfirmation(String password) {
         web.click(PASSWORD_CONFIRMATION_INPUT_FIELD);
         web.type(PASSWORD_CONFIRMATION_INPUT_FIELD, password);
     }
 
-    public void signUp() throws Exception {
+    /**
+     * user is able to click to sign up his account
+     */
+    public void signUp() {
         web.waitUntil(visibilityOfElementLocated(SIGN_UP_BUTTON));
         web.click(SIGN_UP_BUTTON);
     }
